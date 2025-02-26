@@ -1,7 +1,8 @@
 #![no_std]
-#![feature(panic_info_message,asm)]
+#![feature(panic_info_message)]
+#![feature(riscv_ext_intrinsics)]
 
-use core::arch::asm; 
+use core::arch::riscv64;
 
 #[macro_export]
 macro_rules! print
@@ -45,15 +46,15 @@ fn panic(info: &core::panic::PanicInfo) -> ! {
     abort();
 }
 
+
 #[no_mangle]
 extern "C"
-
 fn abort() -> ! {
-    loop {
-        unsafe {
-            asm!("wfi");
-        }
-    }
+	loop {
+		unsafe {
+                    core::arch::riscv64::wfi();
+		}
+	}
 }
 
 
